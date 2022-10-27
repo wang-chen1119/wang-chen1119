@@ -20,25 +20,34 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"wang-chen1119.gitee.io","root":"/myblog/","images":"/myblog/images","scheme":"Pisces","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/myblog/js/config.js"></script>
 
-    <meta name="description" content="足够专注才能成功">
+    <meta name="description" content="回溯法理论 回溯法（探索与回溯法）是一种选优搜索法，又称为试探法，按选优条件向前搜索，以达到目标。但当探索到某一步时，发现原先选择并不优或达不到目标，就退回一步重新选择，这种走不通就退回再走的技术为回溯法，而满足回溯条件的某个状态的点称为“回溯点”。 —引用自百度百科  回溯法与递归的关系十分密切，可以说只要有递归就会有回溯 当我们使用回溯法解决问题时，采用的回溯函数就是递归函数 效率回溯法的性能">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Yorn&#39;s Notes">
-<meta property="og:url" content="http://wang-chen1119.gitee.io/myblog/index.html">
+<meta property="og:title" content="回溯法">
+<meta property="og:url" content="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/index.html">
 <meta property="og:site_name" content="Yorn&#39;s Notes">
-<meta property="og:description" content="足够专注才能成功">
+<meta property="og:description" content="回溯法理论 回溯法（探索与回溯法）是一种选优搜索法，又称为试探法，按选优条件向前搜索，以达到目标。但当探索到某一步时，发现原先选择并不优或达不到目标，就退回一步重新选择，这种走不通就退回再走的技术为回溯法，而满足回溯条件的某个状态的点称为“回溯点”。 —引用自百度百科  回溯法与递归的关系十分密切，可以说只要有递归就会有回溯 当我们使用回溯法解决问题时，采用的回溯函数就是递归函数 效率回溯法的性能">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-1305623006.cos.ap-nanjing.myqcloud.com/image-20211208214419897.png">
+<meta property="og:image" content="https://image-1305623006.cos.ap-nanjing.myqcloud.com/IMG_0077(20211208-215608).PNG">
+<meta property="og:image" content="https://image-1305623006.cos.ap-nanjing.myqcloud.com/IMG_0078(20211208-221533).PNG">
+<meta property="og:image" content="https://image-1305623006.cos.ap-nanjing.myqcloud.com/image-20211208224959076.png">
+<meta property="article:published_time" content="2022-10-27T11:27:18.523Z">
+<meta property="article:modified_time" content="2022-10-27T11:50:05.493Z">
 <meta property="article:author" content="yorn">
+<meta property="article:tag" content="回溯法">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1305623006.cos.ap-nanjing.myqcloud.com/image-20211208214419897.png">
 
 
-<link rel="canonical" href="http://wang-chen1119.gitee.io/myblog/">
+<link rel="canonical" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/","path":"2022/10/27/回溯法/","title":"回溯法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Yorn's Notes</title>
+<title>回溯法 | Yorn's Notes</title>
   
 
 
@@ -69,7 +78,7 @@
 
     <a href="/myblog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Yorn's Notes</h1>
+      <p class="site-title">Yorn's Notes</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -101,7 +110,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -114,6 +123,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">回溯法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-number">1.0.1.</span> <span class="nav-text">理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E7%8E%87"><span class="nav-number">1.0.2.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.3.</span> <span class="nav-text">可以解决的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%9B%9E%E6%BA%AF%E6%B3%95"><span class="nav-number">1.0.4.</span> <span class="nav-text">理解回溯法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E6%B3%95%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.0.5.</span> <span class="nav-text">回溯法模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-number">1.0.6.</span> <span class="nav-text">例题</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -191,16 +201,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -214,13 +225,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yorn's Notes">
+      <meta itemprop="name" content="回溯法 | Yorn's Notes">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/" class="post-title-link" itemprop="url">回溯法</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          回溯法
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -268,7 +279,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h1><h3 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h3><blockquote>
+        <h1 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h1><h3 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h3><blockquote>
 <p>回溯法（探索与回溯法）是一种选优搜索法，又称为试探法，按选优条件向前搜索，以达到目标。但当探索到某一步时，发现原先选择并不优或达不到目标，就退回一步重新选择，这种走不通就退回再走的技术为回溯法，而满足回溯条件的某个状态的点称为“回溯点”。 —引用自百度百科</p>
 </blockquote>
 <p>回溯法与递归的关系十分密切，可以说只要有递归就会有回溯</p>
@@ -322,7 +333,6 @@
 <p>也就是</p>
 <p><img src="https://image-1305623006.cos.ap-nanjing.myqcloud.com/image-20211208224959076.png" alt="image-20211208224959076"></p>
 
-      
     </div>
 
     
@@ -330,11 +340,34 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>yorn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%9E%E6%BA%AF%E6%B3%95/" title="回溯法">http://wang-chen1119.gitee.io/myblog/2022/10/27/回溯法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/myblog/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 回溯法</a>
+              <a href="/myblog/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
     </footer>
   </article>
 </div>
+
 
 
 
