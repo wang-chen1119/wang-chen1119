@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CNoto+Serif+SC:300,300italic,400,400italic,700,700italic%7CAmita:300,300italic,400,400italic,700,700italic%7CMontserrat:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wang-chen1119.gitee.io","root":"/myblog/","images":"/myblog/images","scheme":"Pisces","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/myblog/js/config.js"></script>
+
+    <meta name="description" content="第一章：了解Web及网络基础 1.1使用HTTP协议访问Webweb页面的呈现：   根据Web浏览器地址栏中指定的URL，Web 浏览器从Web服务器端获取文件资源的信息，从而显示出Web页面 像这种通过发送请求获取的服务器资源的Web浏览器等，都可称为客户端 Web是建立在HTTP协议上通信的  1.2HTTP的诞生1989年3月,HTTP诞生  GERN的蒂姆·博纳斯·李博士提出一种能让远隔">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Yorn&#39;s Notes">
+<meta property="og:url" content="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Yorn&#39;s Notes">
+<meta property="og:description" content="第一章：了解Web及网络基础 1.1使用HTTP协议访问Webweb页面的呈现：   根据Web浏览器地址栏中指定的URL，Web 浏览器从Web服务器端获取文件资源的信息，从而显示出Web页面 像这种通过发送请求获取的服务器资源的Web浏览器等，都可称为客户端 Web是建立在HTTP协议上通信的  1.2HTTP的诞生1989年3月,HTTP诞生  GERN的蒂姆·博纳斯·李博士提出一种能让远隔">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://wang-chen1119.gitee.io/myblog/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.assets/image-20211122224230180.png">
+<meta property="article:published_time" content="2022-10-27T11:27:18.586Z">
+<meta property="article:modified_time" content="2021-11-22T15:05:02.787Z">
+<meta property="article:author" content="yorn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://wang-chen1119.gitee.io/myblog/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.assets/image-20211122224230180.png">
+
+
+<link rel="canonical" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/","path":"2022/10/27/图解HTTP读书笔记/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Yorn's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/myblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yorn's Notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-关于"><a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-标签"><a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-分类"><a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E4%BA%86%E8%A7%A3Web%E5%8F%8A%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">第一章：了解Web及网络基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E4%BD%BF%E7%94%A8HTTP%E5%8D%8F%E8%AE%AE%E8%AE%BF%E9%97%AEWeb"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1使用HTTP协议访问Web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2HTTP%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2HTTP的诞生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80TCP-x2F-IP"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3 网络基础TCP&#x2F;IP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-x2F-IP%E7%9A%84%E5%88%86%E5%B1%82%E7%AE%A1%E7%90%86"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">TCP&#x2F;IP的分层管理</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="yorn"
+      src="/myblog/uploads/head.jpg">
+  <p class="site-author-name" itemprop="name">yorn</p>
+  <div class="site-description" itemprop="description">足够专注才能成功</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/myblog/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wang-chen1119" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wang-chen1119" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:w1905989051@gmail.com" title="E-Mail → mailto:w1905989051@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_51088445" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_51088445" rel="noopener" target="_blank">CSDN</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/wang-chen1119" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/head.jpg">
+      <meta itemprop="name" content="yorn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yorn's Notes">
+      <meta itemprop="description" content="足够专注才能成功">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Yorn's Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-27 19:27:18" itemprop="dateCreated datePublished" datetime="2022-10-27T19:27:18+08:00">2022-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-11-22 23:05:02" itemprop="dateModified" datetime="2021-11-22T23:05:02+08:00">2021-11-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>625</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="第一章：了解Web及网络基础"><a href="#第一章：了解Web及网络基础" class="headerlink" title="第一章：了解Web及网络基础"></a>第一章：了解Web及网络基础</h1><hr>
+<h3 id="1-1使用HTTP协议访问Web"><a href="#1-1使用HTTP协议访问Web" class="headerlink" title="1.1使用HTTP协议访问Web"></a>1.1使用HTTP协议访问Web</h3><p>web页面的呈现：</p>
+<p><img src="/myblog/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.assets/image-20211122224230180.png" alt="image-20211122224230180"></p>
+<blockquote>
+<p>根据Web浏览器地址栏中指定的URL，Web 浏览器从Web服务器端获取文件资源的信息，从而显示出Web页面</p>
+<p>像这种通过发送请求获取的服务器资源的Web浏览器等，都可称为客户端</p>
+<p>Web是建立在HTTP协议上通信的</p>
+</blockquote>
+<h3 id="1-2HTTP的诞生"><a href="#1-2HTTP的诞生" class="headerlink" title="1.2HTTP的诞生"></a>1.2HTTP的诞生</h3><p>1989年3月,HTTP诞生</p>
+<p> GERN的蒂姆·博纳斯·李博士提出一种能让远隔两地的研究者们共享知识的设想，该设想最初的理念是：<em><strong>借助多文档之间相互关联形成的超文本，连成可相互参阅的WWW（World Wide Web ，万维网）</strong></em></p>
+<p><strong>WWW的三项构建技术</strong>：</p>
+<ol>
+<li>把SGML（标准通用标记语言）作为页面的文本标记语言的HTML</li>
+<li>作为文档传递协议的HTTP</li>
+<li>指定文档所在地址的URL</li>
+</ol>
+<h3 id="1-3-网络基础TCP-x2F-IP"><a href="#1-3-网络基础TCP-x2F-IP" class="headerlink" title="1.3 网络基础TCP&#x2F;IP"></a>1.3 网络基础TCP&#x2F;IP</h3><p><strong>计算机与网络设备要相互通信，双方就必须基于相同的方法。</strong></p>
+<p>:bookmark_tabs:<strong>协议的概念</strong></p>
+<blockquote>
+<p>不同的硬件，操作系统之间的通信，所有的这一切都需要一种规则，这种规则就成为协议（protocol）</p>
+<p>协议中存在各式各样的内容。从电缆的规则到IP地址选定方法，寻找异地用户的方法，双方建立通信的顺序，以及Web页面显示需要处理的步骤，等等。</p>
+</blockquote>
+<p>而把这样与互联网相关联的协议集合起来总称为TCP&#x2F;IP</p>
+<p>TCP&#x2F;IP的两种说法：</p>
+<ol>
+<li>TCP是指 TCP和IP两种协议</li>
+<li>TCP&#x2F;IP 是在IP协议的通信过程中，使用到的协议族的统称</li>
+</ol>
+<h4 id="TCP-x2F-IP的分层管理"><a href="#TCP-x2F-IP的分层管理" class="headerlink" title="TCP&#x2F;IP的分层管理"></a>TCP&#x2F;IP的分层管理</h4>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>yorn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E5%9B%BE%E8%A7%A3HTTP%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="">http://wang-chen1119.gitee.io/myblog/2022/10/27/图解HTTP读书笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/myblog/2022/10/27/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%E8%A7%A3%E5%86%B3%E5%8A%9B%E6%89%A3406%20452%E4%B8%A4%E9%A2%98/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/myblog/2022/10/27/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yorn</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/myblog/js/comments.js"></script><script src="/myblog/js/utils.js"></script><script src="/myblog/js/motion.js"></script><script src="/myblog/js/next-boot.js"></script><script src="/myblog/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/myblog/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

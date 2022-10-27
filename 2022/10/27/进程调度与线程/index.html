@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/myblog/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/myblog/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/myblog/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/myblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/myblog/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CNoto+Serif+SC:300,300italic,400,400italic,700,700italic%7CAmita:300,300italic,400,400italic,700,700italic%7CMontserrat:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wang-chen1119.gitee.io","root":"/myblog/","images":"/myblog/images","scheme":"Pisces","darkmode":false,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/myblog/js/config.js"></script>
+
+    <meta name="description" content="进程调度与线程进程调度  进程调度即处理机调度，就是按照某种算法动态地把处理机分配给就绪队列中的一个进程，使之执行。  进程调度的基本概念一个进程从提交开始到完成，需要经历三级调度   高级调度： 决定哪些在外存上处于后备状态的作业调入主机内存，准备执行 低级调度：又叫进程调度，决定就绪队列中的哪个进程将获得处理机，并实际执行将处理机分配给该进程的操作 中级调度：在内存和外存对换区之间进行进程对换">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Yorn&#39;s Notes">
+<meta property="og:url" content="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Yorn&#39;s Notes">
+<meta property="og:description" content="进程调度与线程进程调度  进程调度即处理机调度，就是按照某种算法动态地把处理机分配给就绪队列中的一个进程，使之执行。  进程调度的基本概念一个进程从提交开始到完成，需要经历三级调度   高级调度： 决定哪些在外存上处于后备状态的作业调入主机内存，准备执行 低级调度：又叫进程调度，决定就绪队列中的哪个进程将获得处理机，并实际执行将处理机分配给该进程的操作 中级调度：在内存和外存对换区之间进行进程对换">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://wang-chen1119.gitee.io/myblog/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B.assets/image-20211228112833501.png">
+<meta property="og:image" content="http://wang-chen1119.gitee.io/myblog/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B.assets/image-20211228113615308.png">
+<meta property="article:published_time" content="2022-10-27T11:27:18.539Z">
+<meta property="article:modified_time" content="2021-12-28T05:43:22.362Z">
+<meta property="article:author" content="yorn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://wang-chen1119.gitee.io/myblog/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B.assets/image-20211228112833501.png">
+
+
+<link rel="canonical" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://wang-chen1119.gitee.io/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B/","path":"2022/10/27/进程调度与线程/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Yorn's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/myblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/myblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yorn's Notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/myblog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-关于"><a href="/myblog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-标签"><a href="/myblog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-分类"><a href="/myblog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">进程调度与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="nav-number">1.0.1.</span> <span class="nav-text">进程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">进程调度的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">进程调度的功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E6%96%B9%E5%BC%8F"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">进程调度方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">进程调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="nav-number">1.0.1.5.</span> <span class="nav-text">进程调度的时机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">线程的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">线程的属性</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="yorn"
+      src="/myblog/uploads/head.jpg">
+  <p class="site-author-name" itemprop="name">yorn</p>
+  <div class="site-description" itemprop="description">足够专注才能成功</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/myblog/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wang-chen1119" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wang-chen1119" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:w1905989051@gmail.com" title="E-Mail → mailto:w1905989051@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_51088445" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_51088445" rel="noopener" target="_blank">CSDN</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/wang-chen1119" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/myblog/uploads/head.jpg">
+      <meta itemprop="name" content="yorn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yorn's Notes">
+      <meta itemprop="description" content="足够专注才能成功">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Yorn's Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-27 19:27:18" itemprop="dateCreated datePublished" datetime="2022-10-27T19:27:18+08:00">2022-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-28 13:43:22" itemprop="dateModified" datetime="2021-12-28T13:43:22+08:00">2021-12-28</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="进程调度与线程"><a href="#进程调度与线程" class="headerlink" title="进程调度与线程"></a>进程调度与线程</h1><h3 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h3><hr>
+<blockquote>
+<p><strong>进程调度即处理机调度，就是按照某种算法动态地把处理机分配给就绪队列中的一个进程，使之执行。</strong></p>
+</blockquote>
+<h4 id="进程调度的基本概念"><a href="#进程调度的基本概念" class="headerlink" title="进程调度的基本概念"></a>进程调度的基本概念</h4><p>一个进程从提交开始到完成，需要经历三级调度</p>
+<p><img src="/myblog/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B.assets/image-20211228112833501.png" alt="进程的三级调度"></p>
+<ul>
+<li>高级调度： 决定哪些在外存上处于后备状态的作业调入主机内存，准备执行</li>
+<li>低级调度：又叫进程调度，决定就绪队列中的哪个进程将获得处理机，并实际执行将处理机分配给该进程的操作</li>
+<li>中级调度：在内存和外存对换区之间进行进程对换，来解决内存紧张问题</li>
+</ul>
+<p>下面是一个简单地排队调度模型</p>
+<p><img src="/myblog/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B.assets/image-20211228113615308.png" alt="image-20211228113615308"></p>
+<p>​                                                                         </p>
+<h4 id="进程调度的功能"><a href="#进程调度的功能" class="headerlink" title="进程调度的功能"></a>进程调度的功能</h4><p>进程调度就是按照某种算法将处理机动态的分配给某一就绪进程</p>
+<p>主要功能:</p>
+<ol>
+<li>选择占有处理机的进程：即按照调度策略将处理机分配给一个就绪进程</li>
+<li>进行进程上下文的切换:：将当前执行进程的上下文保存到PCB中。刚选中的进程也需要将运行现场恢复，并将处理机控制权给选中进程，使其执行。</li>
+</ol>
+<h4 id="进程调度方式"><a href="#进程调度方式" class="headerlink" title="进程调度方式"></a>进程调度方式</h4><p>进程调度有两种方式</p>
+<ol>
+<li>非剥夺方式：系统不能剥夺正在运行进程的处理机资源，处理机一旦被分配给某个进程后就一直运行下去，直到进程完成或发生某事件而阻塞后才能把处理机分配给某一进程</li>
+</ol>
+<p>优点：简单，系统开销小</p>
+<p>缺点：紧急任务到达时不能立即投入运行，延误战机。 短进程必须等待长进程运行完毕，导致短进程周转时间增长。</p>
+<ol start="2">
+<li>剥夺方式：当一个进程运行时，系统可以基于某种原则剥夺已分配给它的处理机，将之分配给其他的进程。</li>
+</ol>
+<p>剥夺原则</p>
+<ul>
+<li>优先权原则</li>
+<li>短进程优先原则</li>
+<li>时间片原则:一个时间片用完后更新调度</li>
+</ul>
+<h4 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h4><ol>
+<li>先进先出算法(FIFO)：把处理机分配给最先进入就绪队列的进程。</li>
+</ol>
+<p>易于实现，但服务质量不佳，容易引起进程不满。</p>
+<ol start="2">
+<li><p>最短处理机运行期优先调度算法(短进程优先)：从就绪队列中选出下一个处理机执行期最短的进程，为之分配处理机。</p>
+</li>
+<li><p>最高响应比优先调度算法：非剥夺调度算法</p>
+</li>
+</ol>
+<p>响应比计算公式：<br>$$<br>响应比 &#x3D; (等待时间+要求服务的时间)&#x2F;要求服务的时间<br>$$</p>
+<ol start="4">
+<li>优先级调度算法</li>
+</ol>
+<p>两种优先级：</p>
+<ol>
+<li><p>静态优先级。在进程创建时就确定</p>
+<pre><code>决定优先级的依据：
+</code></pre>
+<ul>
+<li>进程的类型</li>
+<li>进程对资源的需求</li>
+<li>用户申请的优先级</li>
+</ul>
+</li>
+<li><p>动态优先级：进程在开始创建时，根据某种原则确定一个优先级后，随着进程执行时间的变化，其优先级不断地进行动态调整。</p>
+</li>
+<li><p>时间片轮转调度算法</p>
+</li>
+<li><p>前后台调度算法</p>
+</li>
+<li><p>多级反馈队列轮转算法</p>
+</li>
+</ol>
+<h4 id="进程调度的时机"><a href="#进程调度的时机" class="headerlink" title="进程调度的时机"></a>进程调度的时机</h4><ol>
+<li>正在执行的程序运行完毕</li>
+<li>正在执行的进程调用阻塞原语将自己阻塞起来进入等待状态</li>
+<li>在采用抢占优先级调度时，有优先级高于正在运行进程的进程进入就绪队列</li>
+<li>在分时系统中时间片已经用完</li>
+</ol>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><p>:question:<strong>为什么要引入线程？</strong></p>
+<p>为了减少程序并发执行时所付出的时空开销，使操作系统具有更好的并发性。</p>
+<h4 id="线程的定义"><a href="#线程的定义" class="headerlink" title="线程的定义"></a>线程的定义</h4><blockquote>
+<p>在引入线程的操作系统中，线程是进程的一个实体，是被独立调度和分派的基本单位。</p>
+<p>线程自己基本上不拥有系统资源，只有一点在运行时必不可少的资源。</p>
+<p>一个线程可以共享同属一个线程的进程的其他线程共享进程所拥有的全部资源。</p>
+<p>一个线程可以创建和撤销另一个线程。</p>
+<p>同一进程中的多个线程之间可以并发执行。</p>
+</blockquote>
+<h4 id="线程的属性"><a href="#线程的属性" class="headerlink" title="线程的属性"></a>线程的属性</h4><blockquote>
+<ol>
+<li>每个线程都有一个唯一的标识符和一张线程描述表，线程描述表记录了线程执行的寄存器和栈等现场状态。</li>
+<li>不同的线程可以执行相同的程序，同一个服务进程被不同用户调用时操作系统为他们创建成不同的线程。</li>
+<li>统一进程中的各个线程共享该进程的内存地址空间。</li>
+<li>线程是处理机的独立调度单位，多个线程是可以并发执行的。</li>
+<li>一个线程被创建后便开始了它的生命周期，直至终止。</li>
+</ol>
+</blockquote>
+<p><strong>引入线程的好处</strong></p>
+<ol>
+<li>创建一个新线程花费时间少</li>
+<li>两个线程的切换花费时间少</li>
+<li>线程之间互相通信无需调用内核，不需要额外的通信机制，通信更简便，信息传送速度也快</li>
+<li>线程能独立执行，能充分利用和发挥处理机与外围设备并行工作的能力</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>yorn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://wang-chen1119.gitee.io/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E4%B8%8E%E7%BA%BF%E7%A8%8B/" title="">http://wang-chen1119.gitee.io/myblog/2022/10/27/进程调度与线程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/myblog/2022/10/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/myblog/2022/10/27/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E6%AD%BB%E9%94%81/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yorn</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/myblog/js/comments.js"></script><script src="/myblog/js/utils.js"></script><script src="/myblog/js/motion.js"></script><script src="/myblog/js/next-boot.js"></script><script src="/myblog/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/myblog/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
